@@ -212,6 +212,16 @@ export default async function Login({
           </button>
         </div>
 
+        <div className="text-muted-foreground mt-1 flex justify-center text-sm">
+          <span className="mr-1">TEST</span>
+          <button
+            formAction={handleResetPassword}
+            className="text-primary ml-1 underline hover:opacity-80"
+          >
+            Reset
+          </button>
+        </div>
+
         {searchParams?.message && (
           <p className="bg-foreground/10 text-foreground mt-4 p-4 text-center">
             {searchParams.message}
