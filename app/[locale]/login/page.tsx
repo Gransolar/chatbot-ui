@@ -9,6 +9,7 @@ import { get } from "@vercel/edge-config"
 import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
+import LoginButton from "@/app/[locale]/login/LoginButton.js" // Asegúrate de que esta ruta sea correcta
 
 export const metadata: Metadata = {
   title: "Login"
@@ -31,8 +32,10 @@ export default async function Login({
       }
     }
   )
+
   const session = (await supabase.auth.getSession()).data.session
 
+  // Redirige al usuario si ya tiene una sesión activa
   if (session) {
     const { data: homeWorkspace, error } = await supabase
       .from("workspaces")
@@ -50,7 +53,6 @@ export default async function Login({
 
   const signIn = async (formData: FormData) => {
     "use server"
-
     const email = formData.get("email") as string
     const password = formData.get("password") as string
     const cookieStore = cookies()
@@ -216,6 +218,9 @@ export default async function Login({
           </p>
         )}
       </form>
+
+      {/* Usa el componente LoginButton para iniciar sesión con SSO */}
+      <LoginButton />
     </div>
   )
 }
