@@ -10,7 +10,6 @@ import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-// Metadata para la página
 export const metadata: Metadata = {
   title: "Login"
 }
@@ -82,20 +81,6 @@ export default async function Login({
     return redirect(`/${homeWorkspace.id}/chat`)
   }
 
-  // Manejar el inicio de sesión con SSO
-  const handleSSOLogin = async () => {
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
-
-    const { error } = await supabase.auth.signInWithSSO({
-      domain: 'gransolar.com', // Reemplaza 'company.com' con tu dominio real
-    })
-
-    if (error) {
-      return redirect(`/login?message=${error.message}`)
-    }
-  }
-
   const getEnvVarOrEdgeConfigValue = async (name: string) => {
     "use server"
     if (process.env.EDGE_CONFIG) {
@@ -123,7 +108,7 @@ export default async function Login({
       ? emailWhitelistPatternsString?.split(",")
       : []
 
-    // Comprobar si el email está permitido para registrarse
+    // If there are whitelist patterns, check if the email is allowed to sign up
     if (emailDomainWhitelist.length > 0 || emailWhitelist.length > 0) {
       const domainMatch = emailDomainWhitelist?.includes(email.split("@")[1])
       const emailMatch = emailWhitelist?.includes(email)
@@ -141,7 +126,8 @@ export default async function Login({
       email,
       password,
       options: {
-        // Si deseas enviar verificación de email, añade la URL aquí
+        // USE IF YOU WANT TO SEND EMAIL VERIFICATION, ALSO CHANGE TOML FILE
+        // emailRedirectTo: `${origin}/auth/callback`
       }
     })
 
@@ -151,6 +137,9 @@ export default async function Login({
     }
 
     return redirect("/setup")
+
+    // USE IF YOU WANT TO SEND EMAIL VERIFICATION, ALSO CHANGE TOML FILE
+    // return redirect("/login?message=Check email to continue sign in process")
   }
 
   const handleResetPassword = async (formData: FormData) => {
@@ -210,16 +199,6 @@ export default async function Login({
         >
           Sign Up
         </SubmitButton>
-
-        <div className="mt-4 flex justify-center gap-2">
-          <button
-            type="button"
-            onClick={handleSSOLogin} // Llama a la función de inicio de sesión SSO
-            className="rounded-md bg-green-500 px-4 py-2 text-white"
-          >
-            Login with SSO
-          </button>
-        </div>
 
         <div className="text-muted-foreground mt-1 flex justify-center text-sm">
           <span className="mr-1">Forgot your password?</span>
