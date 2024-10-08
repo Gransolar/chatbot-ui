@@ -81,6 +81,22 @@ export default async function Login({
     return redirect(`/${homeWorkspace.id}/chat`)
   }
 
+  const signInWithAzure = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'azure',
+      options: {
+        scopes: 'email',
+      },
+    });
+
+    if (error) {
+      console.error('Error signing in with Azure:', error.message);
+      return redirect(`/login?message=${error.message}`);
+    }
+
+    // Aquí puedes manejar la redirección o el procesamiento adicional después de iniciar sesión
+  }
+
   const getEnvVarOrEdgeConfigValue = async (name: string) => {
     "use server"
     if (process.env.EDGE_CONFIG) {
@@ -199,6 +215,15 @@ export default async function Login({
         >
           Sign Up
         </SubmitButton>
+
+        {/* Botón para iniciar sesión con Azure */}
+        <button
+          type="button"
+          onClick={signInWithAzure}
+          className="border-foreground/20 mb-2 rounded-md border px-4 py-2 text-center text-blue-700 hover:bg-blue-100"
+        >
+          Login with Azure
+        </button>
 
         <div className="text-muted-foreground mt-1 flex justify-center text-sm">
           <span className="mr-1">Forgot your password?</span>
