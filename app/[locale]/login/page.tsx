@@ -9,7 +9,7 @@ import { get } from "@vercel/edge-config"
 import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
-import LoginButton from "@/components/LoginButton" // Asegúrate de que esta ruta sea correcta
+import { LoginButton } from "@/components/LoginButton"
 
 export const metadata: Metadata = {
   title: "Login"
@@ -32,10 +32,8 @@ export default async function Login({
       }
     }
   )
-
   const session = (await supabase.auth.getSession()).data.session
 
-  // Redirige al usuario si ya tiene una sesión activa
   if (session) {
     const { data: homeWorkspace, error } = await supabase
       .from("workspaces")
@@ -53,6 +51,7 @@ export default async function Login({
 
   const signIn = async (formData: FormData) => {
     "use server"
+
     const email = formData.get("email") as string
     const password = formData.get("password") as string
     const cookieStore = cookies()
@@ -202,18 +201,15 @@ export default async function Login({
           Sign Up
         </SubmitButton>
 
-        <div className="text-muted-foreground mt-1 flex justify-center text-sm">
-          <span className="mr-1">Forgot your password?</span>
-          <button
-            formAction={handleResetPassword}
-            className="text-primary ml-1 underline hover:opacity-80"
-          >
-            Reset
-          </button>
-        </div>
+        <SubmitButton
+          formAction={LoginButton}
+          className="border-foreground/20 mb-2 rounded-md border px-4 py-2"
+        >
+          SSO
+        </SubmitButton>
 
         <div className="text-muted-foreground mt-1 flex justify-center text-sm">
-          <span className="mr-1">TEST</span>
+          <span className="mr-1">Forgot your password?</span>
           <button
             formAction={handleResetPassword}
             className="text-primary ml-1 underline hover:opacity-80"
@@ -228,9 +224,6 @@ export default async function Login({
           </p>
         )}
       </form>
-
-      {/* Usa el componente LoginButton para iniciar sesión con SSO */}
-      <LoginButton />
     </div>
   )
 }
