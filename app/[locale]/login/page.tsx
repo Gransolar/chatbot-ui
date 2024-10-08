@@ -9,7 +9,7 @@ import { get } from "@vercel/edge-config"
 import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
-import LoginButton from "@/app/[locale]/login/LoginButton.js" // Asegúrate de que esta ruta sea correcta
+import LoginButton from "@/components/LoginButton.js" // Asegúrate de que esta ruta sea correcta
 
 export const metadata: Metadata = {
   title: "Login"
