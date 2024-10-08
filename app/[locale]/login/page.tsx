@@ -9,7 +9,6 @@ import { get } from "@vercel/edge-config"
 import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { LoginButton } from "@/components/LoginButton"
 
 export const metadata: Metadata = {
   title: "Login"
@@ -199,13 +198,6 @@ export default async function Login({
           className="border-foreground/20 mb-2 rounded-md border px-4 py-2"
         >
           Sign Up
-        </SubmitButton>
-
-        <SubmitButton
-          formAction={LoginButton}
-          className="border-foreground/20 mb-2 rounded-md border px-4 py-2"
-        >
-          SSO
         </SubmitButton>
 
         <div className="text-muted-foreground mt-1 flex justify-center text-sm">
