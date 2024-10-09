@@ -18,11 +18,6 @@ export default function Login() {
         domain: 'gransolar.com' // Dominio autorizado configurado en Supabase SAML
       })
 
-      if (data?.url) {
-        // redirect the user to the identity provider's authentication flow
-        window.location.href = data.url
-      }
-
       if (error) {
         setError(error.message) // Muestra el mensaje de error si hay uno
         return
