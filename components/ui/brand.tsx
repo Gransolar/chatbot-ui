@@ -19,7 +19,7 @@ export const Brand: FC<BrandProps> = ({ theme = "dark" }) => {
           className={`${theme === "dark" ? "filter brightness-0" : ""}`} // Cambia el estilo según el tema
         />
       </div>
-      <div className="text-4xl font-bold tracking-wide">Chatbot</div> {/* Cambia el texto */}
+      <div className="text-4xl font-bold tracking-wide">Gransolar Group</div> {/* Cambia el texto */}
     </div>
   );
 }
