@@ -1,66 +1,76 @@
-"use client"
+import { Brand } from "@/components/ui/brand"
+import { createClient } from "@/lib/supabase/server"
+import { Database } from "@/supabase/types"
+import { createServerClient } from "@supabase/ssr"
+import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
 
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import { useState } from 'react'
+export const metadata = {
+  title: "Login"
+}
 
-export default function Login() {
-  const [error, setError] = useState(null)
-  const router = useRouter()
+export default async function Login() {
+  const cookieStore = cookies()
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        }
+      }
+    }
+  )
+  const session = (await supabase.auth.getSession()).data.session
+
+  if (session) {
+    const { data: homeWorkspace, error } = await supabase
+      .from("workspaces")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .eq("is_home", true)
+      .single()
+
+    if (!homeWorkspace) {
+      throw new Error(error.message)
+    }
+
+    return redirect(`/${homeWorkspace.id}/chat`)
+  }
 
   const handleSSOLogin = async () => {
-    const supabase = createClient()
-    try {
-      const { data, error } = await supabase.auth.signInWithSSO({
-        domain: 'gransolar.com'
-      })
+    "use server"
 
-      if (data?.url) {
-        // redirect the user to the identity provider's authentication flow
-        window.location.href = data.url
-      }
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
 
-      if (error) {
-        console.error("Error SSO:", error.message)
-        return
-      }
+    const { data, error } = await supabase.auth.signInWithSSO({
+      domain: 'gransolar.com' // Reemplaza con el dominio de tu empresa o proveedor de SSO
+    })
 
-      // Aquí deberías obtener el ID del workspace una vez la autenticación sea exitosa
-      const session = await supabase.auth.getSession()
-
-      if (session?.data?.session) {
-        const { user } = session.data.session
-
-        // Buscar el workspace correspondiente al usuario autenticado
-        const { data: homeWorkspace, error: homeWorkspaceError } = await supabase
-          .from("workspaces")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("is_home", true)
-          .single()
-
-        if (homeWorkspaceError || !homeWorkspace) {
-          console.error("Error obteniendo el workspace:", homeWorkspaceError?.message)
-          throw new Error(homeWorkspaceError?.message || "No se pudo obtener el workspace.")
-        }
-
-        // Redirigir al workspace correcto
-        window.location.href = `/${homeWorkspace.id}/chat`
-      } else {
-        console.error("Error obteniendo la sesión.")
-      }
-    } catch (err) {
-      console.error("SSO Login Error:", err)
+    if (data?.url) {
+      // redirect the user to the identity provider's authentication flow
+      window.location.href = data.url
     }
+
+    if (error) {
+      console.error("Error during SSO login:", error)
+      return redirect(`/login?message=${error.message}`)
+    }
+
+    // Redirigir después de iniciar sesión con SSO
+    return redirect("/dashboard")
   }
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
       <div className="text-center mb-4">
-        <h1 className="text-2xl font-bold">Login with SSO</h1>
+        <Brand />
+        <h1 className="text-2xl font-bold">Login</h1>
       </div>
 
-      <form onSubmit={handleSSOLogin}>
+      <form action={handleSSOLogin}>
         <button
           type="submit"
           className="mb-6 w-full rounded-md bg-blue-700 px-4 py-2 text-white"
@@ -68,8 +78,6 @@ export default function Login() {
           Sign in with SSO
         </button>
       </form>
-
-      {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
   )
 }
