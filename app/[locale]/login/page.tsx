@@ -55,10 +55,7 @@ export default async function Login({
       domain: "gransolar.com"
     })
 
-    if (data?.url) {
-      // redirect the user to the identity provider's authentication flow
-      window.location.href = data.url
-    }
+    console.log(data)
 
     if (error) {
       console.error("Error during SSO login:", error)
