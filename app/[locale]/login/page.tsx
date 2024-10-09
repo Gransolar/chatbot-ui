@@ -70,7 +70,7 @@ export default async function Login({
     <div className="flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
       <div className="mb-4 text-center">
         <Brand />
-        <h1 className="text-2xl font-bold">Login</h1>
+        <h1 className="text-2xl font-bold"></h1>
       </div>
 
       <form action={handleSSOLogin}>
