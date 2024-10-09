@@ -51,16 +51,18 @@ export default async function Login({
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
 
-    const { data, error } = await supabase.auth.signInWithSSO({
+    // const { data, error } = await supabase.auth.signInWithSSO({
+    //   domain: "gransolar.com"
+    // })
+
+    supabase.auth.signInWithSSO({
       domain: "gransolar.com"
     })
 
-    console.log(data)
-
-    if (error) {
-      console.error("Error during SSO login:", error)
-      return redirect(`/login?message=${error.message}`)
-    }
+    // if (error) {
+    //   console.error("Error during SSO login:", error)
+    //   return redirect(`/login?message=${error.message}`)
+    // }
 
     // Redirigir después de iniciar sesión con SSO
     return redirect("/dashboard")
