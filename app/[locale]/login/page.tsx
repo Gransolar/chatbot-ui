@@ -57,7 +57,6 @@ export default async function Login({
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "azure",
       options: {
-        scopes: "email",
         redirectTo: "https://aurora.gransolar.com/auth/callback"
       }
     })
