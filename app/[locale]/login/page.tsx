@@ -2,14 +2,20 @@ import { Brand } from "@/components/ui/brand"
 import { createClient } from "@/lib/supabase/server"
 import { Database } from "@/supabase/types"
 import { createServerClient } from "@supabase/ssr"
+import { get } from "@vercel/edge-config"
+import { Metadata } from "next"
+import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Login"
 }
 
-export default async function Login() {
+export default async function Login({
+  searchParams
+}: {
+  searchParams: { message: string }
+}) {
   const cookieStore = cookies()
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -46,7 +52,7 @@ export default async function Login() {
     const supabase = createClient(cookieStore)
 
     const { data, error } = await supabase.auth.signInWithSSO({
-      domain: 'gransolar.com' // Reemplaza con el dominio de tu empresa o proveedor de SSO
+      domain: "gransolar.com"
     })
 
     if (data?.url) {
@@ -65,7 +71,7 @@ export default async function Login() {
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
-      <div className="text-center mb-4">
+      <div className="mb-4 text-center">
         <Brand />
         <h1 className="text-2xl font-bold">Login</h1>
       </div>
