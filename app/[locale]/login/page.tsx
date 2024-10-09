@@ -46,7 +46,7 @@ export default async function Login() {
     const supabase = createClient(cookieStore)
 
     const { error } = await supabase.auth.signInWithSSO({
-      domain: 'company.com' // Reemplaza con el dominio de tu empresa o proveedor de SSO
+      domain: 'gransolar.com' // Reemplaza con el dominio de tu empresa o proveedor de SSO
     })
 
     if (error) {
