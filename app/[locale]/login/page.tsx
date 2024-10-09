@@ -5,6 +5,11 @@ const handleSSOLogin = async () => {
       domain: 'gransolar.com'
     })
 
+    if (data?.url) {
+      // redirect the user to the identity provider's authentication flow
+      window.location.href = data.url
+    }
+
     if (error) {
       console.error("Error SSO:", error.message)
       return
