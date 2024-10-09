@@ -55,13 +55,17 @@ export default async function Login({
       domain: "gransolar.com"
     })
 
+    if (data) {
+      redirect(data.url)
+    }
+
     if (error) {
       console.error("Error during SSO login:", error)
       return redirect(`/login?message=${error.message}`)
     }
 
     // Redirigir después de iniciar sesión con SSO
-    // return redirect("/dashboard")
+    return redirect("/dashboard")
   }
 
   return (
