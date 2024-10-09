@@ -18,7 +18,7 @@ export const Brand: FC<BrandProps> = ({ theme = "dark" }) => {
           height={383} // Ajusta la altura según sea necesario
         />
       </div>
-      <div className="text-3xl font-bold tracking-wide">Chatbot</div> {/* Cambia el texto */}
+      <div className="text-3xl font-bold tracking-wide">Aurora</div> {/* Cambia el texto */}
     </div>
   );
 }
