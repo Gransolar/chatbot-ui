@@ -12,7 +12,7 @@ export const Brand: FC<BrandProps> = ({ theme = "dark" }) => {
     <div className="flex flex-col items-center"> {/* Cambia Link a un div */}
       <div className="mb-2">
         <Image
-          src="/logo.png" // Ruta de la imagen
+          src="../logo.png" // Ruta de la imagen
           alt="Chatbot Logo" // Texto alternativo
           width={100} // Ajusta el ancho según sea necesario
           height={100} // Ajusta la altura según sea necesario
