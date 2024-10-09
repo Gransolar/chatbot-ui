@@ -1,71 +1,43 @@
-import { Brand } from "@/components/ui/brand"
-import { createClient } from "@/lib/supabase/server"
-import { Database } from "@/supabase/types"
-import { createServerClient } from "@supabase/ssr"
-import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
+"use client"
 
-export const metadata = {
-  title: "Login"
-}
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { useState } from 'react'
 
-export default async function Login() {
-  const cookieStore = cookies()
-  const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        }
+export default function Login() {
+  const [error, setError] = useState(null)
+  const router = useRouter()
+
+  const handleSSOLogin = async (e) => {
+    e.preventDefault() // Evita que el formulario recargue la página
+
+    const supabase = createClient()
+
+    try {
+      const { data, error } = await supabase.auth.signInWithSSO({
+        domain: 'gransolar.com' // Dominio autorizado configurado en Supabase SAML
+      })
+
+      if (error) {
+        setError(error.message) // Muestra el mensaje de error si hay uno
+        return
       }
+
+      // Si el inicio de sesión SSO es exitoso, redirigir al dashboard
+      router.push("/dashboard")
+    } catch (err) {
+      setError("An unexpected error occurred")
+      console.error("SSO Login Error:", err)
     }
-  )
-  const session = (await supabase.auth.getSession()).data.session
-
-  if (session) {
-    const { data: homeWorkspace, error } = await supabase
-      .from("workspaces")
-      .select("*")
-      .eq("user_id", session.user.id)
-      .eq("is_home", true)
-      .single()
-
-    if (!homeWorkspace) {
-      throw new Error(error.message)
-    }
-
-    return redirect(`/${homeWorkspace.id}/chat`)
-  }
-
-  const handleSSOLogin = async () => {
-    "use server"
-
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
-
-    const { error } = await supabase.auth.signInWithSSO({
-      domain: 'gransolar.com' // Reemplaza con el dominio de tu empresa o proveedor de SSO
-    })
-
-    if (error) {
-      console.error("Error during SSO login:", error)
-      return redirect(`/login?message=${error.message}`)
-    }
-
-    // Redirigir después de iniciar sesión con SSO
-    return redirect("/dashboard")
   }
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
       <div className="text-center mb-4">
-        <Brand />
-        <h1 className="text-2xl font-bold">Login</h1>
+        <h1 className="text-2xl font-bold">Login with SSO</h1>
       </div>
 
-      <form action={handleSSOLogin}>
+      <form onSubmit={handleSSOLogin}>
         <button
           type="submit"
           className="mb-6 w-full rounded-md bg-blue-700 px-4 py-2 text-white"
@@ -73,6 +45,8 @@ export default async function Login() {
           Sign in with SSO
         </button>
       </form>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
   )
 }
