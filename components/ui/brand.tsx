@@ -14,9 +14,8 @@ export const Brand: FC<BrandProps> = ({ theme = "dark" }) => {
         <Image
           src="/logo.png" // Ruta de la imagen
           alt="Chatbot Logo" // Texto alternativo
-          width={100} // Ajusta el ancho según sea necesario
-          height={100} // Ajusta la altura según sea necesario
-          className={`${theme === "dark" ? "filter brightness-0" : ""}`} // Cambia el estilo según el tema
+          width={512} // Ajusta el ancho según sea necesario
+          height={383} // Ajusta la altura según sea necesario
         />
       </div>
       <div className="text-4xl font-bold tracking-wide">Gransolar Group</div> {/* Cambia el texto */}
