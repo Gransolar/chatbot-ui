@@ -51,11 +51,17 @@ export default async function Login({
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
 
-    const { data, error } = await supabase.auth.signInWithSSO({
-      domain: "gransolar.com"
+    // const { data, error } = await supabase.auth.signInWithSSO({
+    //   domain: "gransolar.com"
+    // })
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "azure",
+      options: {
+        scopes: "email"
+      }
     })
 
-    if (data) {
+    if (data.url) {
       redirect(data.url)
     }
 
