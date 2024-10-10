@@ -29,6 +29,12 @@ export default async function Login({
       }
     }
   )
+
+  const { data, error } = await supabase.auth.getUser()
+  if (data?.user) {
+    redirect("/setup")
+  }
+
   const session = (await supabase.auth.getSession()).data.session
 
   if (session) {
