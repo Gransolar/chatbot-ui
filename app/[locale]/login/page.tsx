@@ -69,9 +69,8 @@ export default async function Login({
       return redirect(`/login?message=${error.message}`)
     }
 
-    revalidatePath("/", "layout")
     // Redirigir después de iniciar sesión con SSO
-    return redirect("/dashboard")
+    // return redirect("/dashboard")
   }
 
   return (
