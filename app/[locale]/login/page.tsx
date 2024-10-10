@@ -6,6 +6,7 @@ import { get } from "@vercel/edge-config"
 import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
 export const metadata: Metadata = {
   title: "Login"
@@ -51,30 +52,6 @@ export default async function Login({
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
 
-    // Register this immediately after calling createClient!
-    // Because signInWithOAuth causes a redirect, you need to fetch the
-    // provider tokens from the callback.
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (session && session.provider_token) {
-        window.localStorage.setItem(
-          "oauth_provider_token",
-          session.provider_token
-        )
-      }
-
-      if (session && session.provider_refresh_token) {
-        window.localStorage.setItem(
-          "oauth_provider_refresh_token",
-          session.provider_refresh_token
-        )
-      }
-
-      if (event === "SIGNED_OUT") {
-        window.localStorage.removeItem("oauth_provider_token")
-        window.localStorage.removeItem("oauth_provider_refresh_token")
-      }
-    })
-
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "azure",
       options: {
@@ -92,6 +69,7 @@ export default async function Login({
       return redirect(`/login?message=${error.message}`)
     }
 
+    revalidatePath("/", "layout")
     // Redirigir después de iniciar sesión con SSO
     return redirect("/dashboard")
   }
