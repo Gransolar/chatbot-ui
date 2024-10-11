@@ -69,11 +69,9 @@ export default function SetupPage() {
         return router.push("/login")
       } else {
         const user = session.user
-        console.log(user)
 
         const profile = await getProfileByUserId(user.id)
-        console.log("------------------------")
-        console.log(profile)
+
         setProfile(profile)
         setUsername(profile.username)
 
