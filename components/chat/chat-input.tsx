@@ -78,7 +78,7 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
   useEffect(() => {
     setTimeout(() => {
       handleFocusChatInput()
-    }, 400) // FIX: hacky
+    }, 200) // FIX: hacky
   }, [selectedPreset, selectedAssistant])
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
