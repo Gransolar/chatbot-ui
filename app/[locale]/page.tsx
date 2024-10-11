@@ -8,7 +8,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Redirigir automáticamente al login cuando se cargue la página
-    router.push("/login")
+    router.push("/setup")
   }, [router])
 
   return null // No se muestra nada porque se redirige automáticamente
