@@ -72,6 +72,8 @@ export default function SetupPage() {
         console.log(user)
 
         const profile = await getProfileByUserId(user.id)
+        console.log("------------------------")
+        console.log(profile)
         setProfile(profile)
         setUsername(profile.username)
 
