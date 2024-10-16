@@ -74,6 +74,8 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
   useEffect(() => {
     ;(async () => await fetchWorkspaceData(workspaceId))()
 
+    console.log("workspace data fetched")
+    console.log(workspaceId)
     setUserInput("")
     setChatMessages([])
     setSelectedChat(null)
@@ -92,6 +94,8 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     setLoading(true)
 
     const workspace = await getWorkspaceById(workspaceId)
+    console.log("workspace")
+    console.log(workspace)
     setSelectedWorkspace(workspace)
 
     const assistantData = await getAssistantWorkspacesByWorkspaceId(workspaceId)

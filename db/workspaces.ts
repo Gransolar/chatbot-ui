@@ -17,6 +17,7 @@ export const getHomeWorkspaceByUserId = async (userId: string) => {
 }
 
 export const getWorkspaceById = async (workspaceId: string) => {
+  console.log("workspace", workspaceId)
   const { data: workspace, error } = await supabase
     .from("workspaces")
     .select("*")
@@ -24,6 +25,7 @@ export const getWorkspaceById = async (workspaceId: string) => {
     .single()
 
   if (!workspace) {
+    console.log("error", error)
     throw new Error(error.message)
   }
 
@@ -64,6 +66,7 @@ export const updateWorkspace = async (
   workspaceId: string,
   workspace: TablesUpdate<"workspaces">
 ) => {
+  debugger
   const { data: updatedWorkspace, error } = await supabase
     .from("workspaces")
     .update(workspace)

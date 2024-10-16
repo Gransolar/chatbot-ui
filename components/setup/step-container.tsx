@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/card"
 import { FC, useRef } from "react"
 
-export const SETUP_STEP_COUNT = 3
+// export const SETUP_STEP_COUNT = 3
+export const SETUP_STEP_COUNT = 1
 
 interface StepContainerProps {
   stepDescription: string
@@ -19,6 +20,7 @@ interface StepContainerProps {
   children?: React.ReactNode
   showBackButton?: boolean
   showNextButton?: boolean
+  nextButtonText?: string
 }
 
 export const StepContainer: FC<StepContainerProps> = ({
@@ -28,7 +30,8 @@ export const StepContainer: FC<StepContainerProps> = ({
   onShouldProceed,
   children,
   showBackButton = false,
-  showNextButton = true
+  showNextButton = true,
+  nextButtonText = "Next"
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -79,7 +82,7 @@ export const StepContainer: FC<StepContainerProps> = ({
               size="sm"
               onClick={() => onShouldProceed(true)}
             >
-              Next
+              {nextButtonText}
             </Button>
           )}
         </div>

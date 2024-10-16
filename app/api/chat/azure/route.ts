@@ -20,14 +20,17 @@ export async function POST(request: Request) {
 
     let DEPLOYMENT_ID = ""
     switch (chatSettings.model) {
-      case "gpt-3.5-turbo":
-        DEPLOYMENT_ID = profile.azure_openai_35_turbo_id || ""
-        break
-      case "gpt-4-turbo-preview":
-        DEPLOYMENT_ID = profile.azure_openai_45_turbo_id || ""
-        break
-      case "gpt-4-vision-preview":
-        DEPLOYMENT_ID = profile.azure_openai_45_vision_id || ""
+      // case "gpt-3.5-turbo":
+      //   DEPLOYMENT_ID = profile.azure_openai_35_turbo_id || ""
+      //   break
+      // case "gpt-4-turbo-preview":
+      //   DEPLOYMENT_ID = profile.azure_openai_45_turbo_id || ""
+      //   break
+      // case "gpt-4-vision-preview":
+      //   DEPLOYMENT_ID = profile.azure_openai_45_vision_id || ""
+      //   break
+      case "gpt-4o":
+        DEPLOYMENT_ID = profile.azure_openai_4o_id || ""
         break
       default:
         return new Response(JSON.stringify({ message: "Model not found" }), {

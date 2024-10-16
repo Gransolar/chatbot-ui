@@ -144,6 +144,9 @@ export const ProfileStep: FC<ProfileStepProps> = ({
           limit={PROFILE_DISPLAY_NAME_MAX}
         />
       </div>
+      <div className="space-y-1">
+        Finish your configuration and start chatting
+      </div>
     </>
   )
 }

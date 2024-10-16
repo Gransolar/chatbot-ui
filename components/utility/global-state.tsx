@@ -77,7 +77,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [userInput, setUserInput] = useState<string>("")
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
   const [chatSettings, setChatSettings] = useState<ChatSettings>({
-    model: "gpt-4-turbo-preview",
+    model: "gpt-4o",
     prompt: "You are a helpful AI assistant.",
     temperature: 0.5,
     contextLength: 4000,
@@ -85,6 +85,15 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
     includeWorkspaceInstructions: true,
     embeddingsProvider: "openai"
   })
+  // const [chatSettings, setChatSettings] = useState<ChatSettings>({
+  //   model: "gpt-4-turbo-preview",
+  //   prompt: "You are a helpful AI assistant.",
+  //   temperature: 0.5,
+  //   contextLength: 4000,
+  //   includeProfileContext: true,
+  //   includeWorkspaceInstructions: true,
+  //   embeddingsProvider: "openai"
+  // })
   const [selectedChat, setSelectedChat] = useState<Tables<"chats"> | null>(null)
   const [chatFileItems, setChatFileItems] = useState<Tables<"file_items">[]>([])
 

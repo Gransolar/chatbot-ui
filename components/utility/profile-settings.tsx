@@ -97,6 +97,9 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
   const [azureOpenai45VisionID, setAzureOpenai45VisionID] = useState(
     profile?.azure_openai_45_vision_id || ""
   )
+  const [azureOpenai4oID, setAzureOpenai4oID] = useState(
+    profile?.azure_openai_4o_id || ""
+  )
   const [azureEmbeddingsID, setAzureEmbeddingsID] = useState(
     profile?.azure_openai_embeddings_id || ""
   )
@@ -156,6 +159,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
       azure_openai_35_turbo_id: azureOpenai35TurboID,
       azure_openai_45_turbo_id: azureOpenai45TurboID,
       azure_openai_45_vision_id: azureOpenai45VisionID,
+      azure_openai_4o_id: azureOpenai4oID,
       azure_openai_embeddings_id: azureEmbeddingsID,
       openrouter_api_key: openrouterAPIKey
     })
@@ -573,6 +577,25 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
                               onChange={e =>
                                 setAzureOpenai45VisionID(e.target.value)
                               }
+                            />
+                          </>
+                        )}
+                      </div>
+                    }
+                    {
+                      <div className="space-y-1">
+                        {envKeyMap["azure_gpt_4o_name"] ? (
+                          <Label className="text-xs">
+                            Azure GPT-4.5 Vision deployment name set by admin.
+                          </Label>
+                        ) : (
+                          <>
+                            <Label>Azure GPT-4.5 Vision Deployment Name</Label>
+
+                            <Input
+                              placeholder="Azure GPT-4.5 Vision Deployment Name"
+                              value={azureOpenai4oID}
+                              onChange={e => setAzureOpenai4oID(e.target.value)}
                             />
                           </>
                         )}

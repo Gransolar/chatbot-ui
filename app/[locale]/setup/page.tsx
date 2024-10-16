@@ -64,7 +64,7 @@ export default function SetupPage() {
   useEffect(() => {
     ;(async () => {
       const session = (await supabase.auth.getSession()).data.session
-
+      // debugger
       if (!session) {
         return router.push("/login")
       } else {
@@ -73,7 +73,7 @@ export default function SetupPage() {
         const profile = await getProfileByUserId(user.id)
 
         setProfile(profile)
-        setUsername(profile.username)
+        setUsername(user?.email?.substring(0, user.email.indexOf("@")))
 
         if (!profile.has_onboarded) {
           setLoading(false)
@@ -134,7 +134,8 @@ export default function SetupPage() {
       groq_api_key: groqAPIKey,
       perplexity_api_key: perplexityAPIKey,
       openrouter_api_key: openrouterAPIKey,
-      use_azure_openai: useAzureOpenai,
+      // use_azure_openai: useAzureOpenai,
+      use_azure_openai: false,
       azure_openai_api_key: azureOpenaiAPIKey,
       azure_openai_endpoint: azureOpenaiEndpoint,
       azure_openai_35_turbo_id: azureOpenai35TurboID,
@@ -147,6 +148,7 @@ export default function SetupPage() {
     setProfile(updatedProfile)
 
     const workspaces = await getWorkspacesByUserId(profile.user_id)
+    debugger
     const homeWorkspace = workspaces.find(w => w.is_home)
 
     // There will always be a home workspace
@@ -156,7 +158,11 @@ export default function SetupPage() {
     return router.push(`/${homeWorkspace?.id}/chat`)
   }
 
+  console.log("setup reached")
+
   const renderStep = (stepNum: number) => {
+    console.log("profile")
+    console.log(profile)
     switch (stepNum) {
       // Profile Step
       case 1:
@@ -168,6 +174,7 @@ export default function SetupPage() {
             onShouldProceed={handleShouldProceed}
             showNextButton={!!(username && usernameAvailable)}
             showBackButton={false}
+            nextButtonText="Finish"
           >
             <ProfileStep
               username={username}
