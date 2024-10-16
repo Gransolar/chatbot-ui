@@ -2,6 +2,7 @@
 
 import { ChatbotUIContext } from "@/context/context"
 import { getProfileByUserId, updateProfile } from "@/db/profile"
+import { updateWorkspace } from "@/db/workspaces"
 import {
   getHomeWorkspaceByUserId,
   getWorkspacesByUserId
@@ -62,7 +63,7 @@ export default function SetupPage() {
   const [openrouterAPIKey, setOpenrouterAPIKey] = useState("")
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const session = (await supabase.auth.getSession()).data.session
       // debugger
       if (!session) {
@@ -135,7 +136,7 @@ export default function SetupPage() {
       perplexity_api_key: perplexityAPIKey,
       openrouter_api_key: openrouterAPIKey,
       // use_azure_openai: useAzureOpenai,
-      use_azure_openai: false,
+      use_azure_openai: true,
       azure_openai_api_key: azureOpenaiAPIKey,
       azure_openai_endpoint: azureOpenaiEndpoint,
       azure_openai_35_turbo_id: azureOpenai35TurboID,
@@ -144,25 +145,29 @@ export default function SetupPage() {
       azure_openai_embeddings_id: azureOpenaiEmbeddingsID
     }
 
+
     const updatedProfile = await updateProfile(profile.id, updateProfilePayload)
     setProfile(updatedProfile)
 
-    const workspaces = await getWorkspacesByUserId(profile.user_id)
-    debugger
+
+    let workspaces = await getWorkspacesByUserId(profile.user_id)
     const homeWorkspace = workspaces.find(w => w.is_home)
+    const updateWorkspacePayload: TablesUpdate<"workspaces"> = {
+      ...homeWorkspace,
+      default_model: 'gpt-4o',
+    }
+    const updatedWorkspace = await updateWorkspace(homeWorkspace.id, updateWorkspacePayload)
 
     // There will always be a home workspace
-    setSelectedWorkspace(homeWorkspace!)
+    setSelectedWorkspace(updatedWorkspace!)
+    workspaces = await getWorkspacesByUserId(profile.user_id)
     setWorkspaces(workspaces)
 
     return router.push(`/${homeWorkspace?.id}/chat`)
   }
 
-  console.log("setup reached")
 
   const renderStep = (stepNum: number) => {
-    console.log("profile")
-    console.log(profile)
     switch (stepNum) {
       // Profile Step
       case 1:

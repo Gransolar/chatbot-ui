@@ -159,7 +159,7 @@ export const ProfileSettings: FC<ProfileSettingsProps> = ({}) => {
       azure_openai_35_turbo_id: azureOpenai35TurboID,
       azure_openai_45_turbo_id: azureOpenai45TurboID,
       azure_openai_45_vision_id: azureOpenai45VisionID,
-      azure_openai_4o_id: azureOpenai4oID,
+      // azure_openai_4o_id: azureOpenai4oID,
       azure_openai_embeddings_id: azureEmbeddingsID,
       openrouter_api_key: openrouterAPIKey
     })
