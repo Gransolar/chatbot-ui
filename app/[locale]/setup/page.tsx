@@ -74,7 +74,11 @@ export default function SetupPage() {
         const profile = await getProfileByUserId(user.id)
 
         setProfile(profile)
-        setUsername(user?.email?.substring(0, user?.email?.indexOf("@")))
+        setUsername(
+          user?.email
+            ? user?.email?.substring(0, user?.email?.indexOf("@"))
+            : ""
+        )
 
         if (!profile.has_onboarded) {
           setLoading(false)
@@ -156,7 +160,7 @@ export default function SetupPage() {
       default_model: "gpt-4o"
     }
     const updatedWorkspace = await updateWorkspace(
-      homeWorkspace.id,
+      homeWorkspace?.id,
       updateWorkspacePayload
     )
 
@@ -165,7 +169,7 @@ export default function SetupPage() {
     workspaces = await getWorkspacesByUserId(profile.user_id)
     setWorkspaces(workspaces)
 
-    return (window.location.href = `/${homeWorkspace.id}/chat`)
+    return (window.location.href = `/${homeWorkspace?.id}/chat`)
   }
 
   const renderStep = (stepNum: number) => {
