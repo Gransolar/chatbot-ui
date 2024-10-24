@@ -160,7 +160,7 @@ export default function SetupPage() {
       default_model: "gpt-4o"
     }
     const updatedWorkspace = await updateWorkspace(
-      homeWorkspace?.id,
+      homeWorkspace?.id || "",
       updateWorkspacePayload
     )
 
