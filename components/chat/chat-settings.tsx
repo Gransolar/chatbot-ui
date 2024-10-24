@@ -32,7 +32,6 @@ export const ChatSettings: FC<ChatSettingsProps> = ({}) => {
 
   useEffect(() => {
     if (!chatSettings) return
-    console.log(chatSettings)
 
     setChatSettings({
       ...chatSettings,

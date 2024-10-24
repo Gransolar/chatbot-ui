@@ -63,7 +63,7 @@ export default function SetupPage() {
   const [openrouterAPIKey, setOpenrouterAPIKey] = useState("")
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       const session = (await supabase.auth.getSession()).data.session
       // debugger
       if (!session) {
@@ -74,7 +74,7 @@ export default function SetupPage() {
         const profile = await getProfileByUserId(user.id)
 
         setProfile(profile)
-        setUsername(user?.email?.substring(0, user.email.indexOf("@")))
+        setUsername(user?.email?.substring(0, user?.email?.indexOf("@")))
 
         if (!profile.has_onboarded) {
           setLoading(false)
@@ -95,7 +95,8 @@ export default function SetupPage() {
           const homeWorkspaceId = await getHomeWorkspaceByUserId(
             session.user.id
           )
-          return router.push(`/${homeWorkspaceId}/chat`)
+          // return router.push(`/${homeWorkspaceId}/chat`)
+          return (window.location.href = `/${homeWorkspaceId}/chat`)
         }
       }
     })()
@@ -145,27 +146,27 @@ export default function SetupPage() {
       azure_openai_embeddings_id: azureOpenaiEmbeddingsID
     }
 
-
     const updatedProfile = await updateProfile(profile.id, updateProfilePayload)
     setProfile(updatedProfile)
-
 
     let workspaces = await getWorkspacesByUserId(profile.user_id)
     const homeWorkspace = workspaces.find(w => w.is_home)
     const updateWorkspacePayload: TablesUpdate<"workspaces"> = {
       ...homeWorkspace,
-      default_model: 'gpt-4o',
+      default_model: "gpt-4o"
     }
-    const updatedWorkspace = await updateWorkspace(homeWorkspace.id, updateWorkspacePayload)
+    const updatedWorkspace = await updateWorkspace(
+      homeWorkspace.id,
+      updateWorkspacePayload
+    )
 
     // There will always be a home workspace
     setSelectedWorkspace(updatedWorkspace!)
     workspaces = await getWorkspacesByUserId(profile.user_id)
     setWorkspaces(workspaces)
 
-    return router.push(`/${homeWorkspace?.id}/chat`)
+    return (window.location.href = `/${homeWorkspace.id}/chat`)
   }
-
 
   const renderStep = (stepNum: number) => {
     switch (stepNum) {
