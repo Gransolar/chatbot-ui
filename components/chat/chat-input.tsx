@@ -20,6 +20,7 @@ import { useChatHandler } from "./chat-hooks/use-chat-handler"
 import { useChatHistoryHandler } from "./chat-hooks/use-chat-history"
 import { usePromptAndCommand } from "./chat-hooks/use-prompt-and-command"
 import { useSelectFileHandler } from "./chat-hooks/use-select-file-handler"
+import { Button } from "../ui/button"
 
 interface ChatInputProps {}
 
@@ -210,70 +211,90 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
           </div>
         )}
       </div>
+      <div className="flex items-baseline gap-8">
+        <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">
+          <div className="absolute bottom-[76px] left-0 max-h-[300px] w-full overflow-auto rounded-xl dark:border-none">
+            <ChatCommandInput />
+          </div>
 
-      <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">
-        <div className="absolute bottom-[76px] left-0 max-h-[300px] w-full overflow-auto rounded-xl dark:border-none">
-          <ChatCommandInput />
-        </div>
-
-        <>
-          <IconCirclePlus
-            className="absolute bottom-[12px] left-3 cursor-pointer p-1 hover:opacity-50"
-            size={32}
-            onClick={() => fileInputRef.current?.click()}
-          />
-
-          {/* Hidden input to select files from device */}
-          <Input
-            ref={fileInputRef}
-            className="hidden"
-            type="file"
-            onChange={e => {
-              if (!e.target.files) return
-              handleSelectDeviceFile(e.target.files[0])
-            }}
-            accept={filesToAccept}
-          />
-        </>
-
-        <TextareaAutosize
-          textareaRef={chatInputRef}
-          className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          placeholder={t(
-            // `Ask anything. Type "@" for assistants, "/" for prompts, "#" for files, and "!" for tools.`
-            `Ask anything. Type @  /  #  !`
-          )}
-          onValueChange={handleInputChange}
-          value={userInput}
-          minRows={1}
-          maxRows={18}
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-          onCompositionStart={() => setIsTyping(true)}
-          onCompositionEnd={() => setIsTyping(false)}
-        />
-
-        <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
-          {isGenerating ? (
-            <IconPlayerStopFilled
-              className="hover:bg-background animate-pulse rounded bg-transparent p-1"
-              onClick={handleStopMessage}
-              size={30}
+          <>
+            <IconCirclePlus
+              className="absolute bottom-[12px] left-3 cursor-pointer p-1 hover:opacity-50"
+              size={32}
+              onClick={() => fileInputRef.current?.click()}
             />
-          ) : (
-            <IconSend
-              className={cn(
-                "bg-primary text-secondary rounded p-1",
-                !userInput && "cursor-not-allowed opacity-50"
-              )}
-              onClick={() => {
-                if (!userInput) return
 
-                handleSendMessage(userInput, chatMessages, false)
+            {/* Hidden input to select files from device */}
+            <Input
+              ref={fileInputRef}
+              className="hidden"
+              type="file"
+              onChange={e => {
+                if (!e.target.files) return
+                handleSelectDeviceFile(e.target.files[0])
               }}
-              size={30}
+              accept={filesToAccept}
             />
-          )}
+          </>
+
+          <TextareaAutosize
+            textareaRef={chatInputRef}
+            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            placeholder={t(
+              // `Ask anything. Type "@" for assistants, "/" for prompts, "#" for files, and "!" for tools.`
+              `Ask anything. Type @  /  #  !`
+            )}
+            onValueChange={handleInputChange}
+            value={userInput}
+            minRows={1}
+            maxRows={18}
+            onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
+            onCompositionStart={() => setIsTyping(true)}
+            onCompositionEnd={() => setIsTyping(false)}
+          />
+
+          <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
+            {isGenerating ? (
+              <IconPlayerStopFilled
+                className="hover:bg-background animate-pulse rounded bg-transparent p-1"
+                onClick={handleStopMessage}
+                size={30}
+              />
+            ) : (
+              <IconSend
+                className={cn(
+                  "bg-primary text-secondary rounded p-1",
+                  !userInput && "cursor-not-allowed opacity-50"
+                )}
+                onClick={() => {
+                  if (!userInput) return
+
+                  handleSendMessage(userInput, chatMessages, false)
+                }}
+                size={30}
+              />
+            )}
+          </div>
+        </div>
+        <div className="flex items-center">
+          <a
+            href="https://forms.office.com/e/6T0PFDL65M"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-4"
+          >
+            <Button className="h-[26px] text-xs" size="lg">
+              Feedback
+              <img
+                src="https://static-00.iconduck.com/assets.00/thumbs-up-icon-512x494-o2379yaq.png"
+                alt=""
+                width={12}
+                height={12}
+                style={{ marginInlineStart: 4 }}
+              />
+            </Button>
+          </a>
         </div>
       </div>
     </>
